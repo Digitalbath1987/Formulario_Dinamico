@@ -1,0 +1,360 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Default.master.cs" Inherits="ALO.WebSite.Default" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Expires" content="0"/>
+    <meta http-equiv="Last-Modified" content="0"/>
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+	<link rel="icon" href="favicon.ico" />
+	<title>FORMULARIOS</title>
+
+         
+	<%=CSSLink("~/lib/bootstrap-3.3.7/css/bootstrap.min.css")%>
+	<%=CSSLink("~/lib/font-awesome-4.7.0/css/font-awesome.min.css")%>
+	<%=CSSLink("~/lib/jquery-ui-1.12.1.custom/jquery-ui.min.css")%>
+	<%=CSSLink("~/lib/bootstrap-select/css/bootstrap-select.css")%>
+	<%=CSSLink("~/lib/Datatables/css/dataTables.bootstrap.css")%>
+    <%=CSSLink("~/lib/notifyjs/styles/metro/notify-metro.css")%>
+    <%=CSSLink("~/css/Default.css")%>
+
+	<%=JSLink("~/lib/jquery-3.2.0/jquery-3.2.0.min.js")%>
+	<%=JSLink("~/lib/bootstrap-3.3.7/js/bootstrap.min.js")%>
+	<%=JSLink("~/lib/jquery-ui-1.12.1.custom/jquery-ui.min.js")%>
+	<%=JSLink("~/lib/Datatables/js/jquery.dataTables.min.js")%>
+	<%=JSLink("~/lib/Datatables/js/dataTables.bootstrap.js")%>
+	<%=JSLink("~/lib/bootstrap-select/js/bootstrap-select.js")%>
+    <%=JSLink("~/lib/notifyjs/notify.js")%>
+    <%=JSLink("~/lib/notifyjs/styles/metro/notify-metro.js")%>
+
+
+
+	<!-- ===============================================================================================================================-->
+	<!-- ESTILOS                                                                                                                        -->
+    <!-- ===============================================================================================================================-->
+	<style type="text/css">
+		.CenterPB {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -30px; /* make this half your image/element height */
+			margin-left: -30px; /* make this half your image/element width */
+		}
+
+		.overlay {
+			position: absolute;
+			background-color: white;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			opacity: 0.8;
+			-moz-opacity: 0.8;
+			filter: alpha(opacity=30);
+			-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+			z-index: 10000;
+			bottom: 462px;
+		}
+	</style>
+	<!-- ===============================================================================================================================-->
+	<!-- FIN ESTILOS                                                                                                                    -->
+    <!-- ===============================================================================================================================-->
+
+	<!-- ===============================================================================================================================-->
+	<!-- SCRIPT                                                                                                                         -->
+    <!-- ===============================================================================================================================-->
+	<script type="text/javascript">
+
+
+
+
+
+
+
+	    //======================================================================================
+	    // MENSAJE LOG POR PANTALLA                                                           ==
+	    //======================================================================================
+	    function MensajeLOG(Titulo) {
+
+
+	        //=================================================================
+	        // CAMBIO TITULO DEL MODAL                                    
+	        //=================================================================
+	        $("#TituloModal").html(Titulo);
+
+	        //=================================================================
+	        // RELLENO LOS DATOS                                    
+	        //=================================================================
+	        var ObjetoServer = document.getElementById("<%=LOG_MENSAJE_SERVER.ClientID%>");
+	        $("#LOG_MENSAJE_DIALOG").html(ObjetoServer.innerHTML);
+
+	        //=================================================================
+	        // MOSTRAR INFORMACION MODAL                                    
+	        //=================================================================
+	        $("#mostrarmodal").modal("show");
+	        ObjetoServer.innerHTML = '';
+
+
+
+        }
+
+
+
+        //======================================================================================
+        // MOSTRAR DETALLE DE MENSAJE  EN EL POPUP DE ERRORES                                 ==
+        //======================================================================================
+        function MostrarThrow() {
+            document.getElementById("OcultoThrowError").style.display = "block";
+            document.getElementById("IMG_MostrarError").style.display = "none";
+            document.getElementById("IMG_OcultarError").style.display = "block";
+
+        }
+        function OcultarThrow() {
+            document.getElementById("OcultoThrowError").style.display = "none";
+            document.getElementById("IMG_MostrarError").style.display = "block";
+            document.getElementById("IMG_OcultarError").style.display = "none";
+        }
+
+
+
+
+
+        $.extend(
+        {
+            redirectPost: function (location, args) {
+                var form = $('<form>', { action: location, method: 'post' });
+                $.each(args,
+					 function (key, value) {
+					     $(form).append(
+                              $('<input>', { type: 'hidden', name: key, value: value })
+                         );
+					 });
+                $(form).appendTo('body').submit();
+            }
+
+
+
+
+        });
+
+        $.extend(
+        {
+            redirectPostWinOpen: function (location, winName, args) {
+                var form = $('<form>', { action: location, method: 'post', 'target': winName });
+                $.each(args,
+					 function (key, value) {
+					     $(form).append(
+                              $('<input>', { type: 'hidden', name: key, value: value })
+                         );
+					 });
+
+                $('body').append(form);
+                window.open(location, winName, '');
+                form.target = winName;
+                form.submit();
+
+            }
+
+
+
+
+        });
+
+
+
+        //======================================================================================
+        // MENSAJES DE NOTIFICACION                                                           ==
+        //======================================================================================
+        function MSG(style, Mensaje) {
+            $.notify({
+                title: 'RECEPCION DE ENTRADA',
+                text: Mensaje,
+                image: "<img src='<%=Href("~/images/Mail.png")%>'/>"
+            }, {
+                style: 'metro',
+                className: style,
+                autoHide: true,
+                clickToHide: true,
+                autoHideDelay: 10000
+            });
+        }
+
+        //======================================================================================
+        // LOG DE API UTILIZADAS                                                              ==
+        //======================================================================================
+        function DIV_LOG_API(DIV) {
+
+            OBJ_DIV_LOG = document.getElementById(DIV);
+        }
+
+        //======================================================================================
+        // LOG DE API UTILIZADAS                                                              ==
+        //======================================================================================
+        function LOG_API(MENSAJE) {
+
+            //$("#RESULTADO").css("display", "block");
+            $(OBJ_DIV_LOG).append('<br>' + MENSAJE);
+        }
+
+        //======================================================================================
+        // LOG DE API UTILIZADAS                                                              ==
+        //======================================================================================
+        function LIMPIAR_LOG() {
+
+            $(OBJ_DIV_LOG).html("");
+
+        }
+
+
+
+    </script>
+	<!-- ===============================================================================================================================-->
+	<!-- FIN SCRIPT                                                                                                                     -->
+    <!-- ===============================================================================================================================-->
+
+
+
+	<asp:ContentPlaceHolder ID="head" runat="server">
+	</asp:ContentPlaceHolder>
+
+
+
+</head>
+<body>
+
+
+	<form id="form1" enctype="multipart/form-data" runat="server">
+
+
+    <asp:ScriptManager ID="ScriptManager1" ScriptMode="Release" runat="server" EnablePageMethods="True" EnableScriptGlobalization="true"  >
+    </asp:ScriptManager>
+
+		<!-- ===========================================================================================================================-->
+		<!-- NAVEGADOR                                                                                                                  -->
+		<!-- ===========================================================================================================================-->
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href='<%=ResolveClientUrl("Home") %>'>
+
+						<img style="max-width: 230px; margin-top: -7px; margin-left: 0px; height: 60px" alt="Logo"
+							src='<%=Href("~/images/LOGO_A.png")%>' />
+					</a>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+
+				<%--		<!-- =========================================-->
+						<!-- MENU HOME						   		  -->
+						<!-- =========================================-->
+						<li><a href='<%=ResolveClientUrl("Home") %>'><i class="fa fa-home"></i>HOME</a></li>
+
+						<!-- =========================================-->
+						<!-- MENU TAREAS                              -->
+						<!-- =========================================-->
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fas fa-sitemap"></i> FORMULARIOS <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+                                <li><a href='<%=ResolveClientUrl("VTA/FORMULARIO") %>'> FORMULARIO</a></li>
+                                <li class="divider"></li>
+							</ul>
+						</li>--%>
+
+
+
+                      <%--  <li>
+                            <asp:LinkButton ID="LinkButton2" runat="server" CssClass="" font="#FFFFFF" ToolTip="VIDEOS DE AYUDA" OnClick="btnLearning_Click">
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp; AYUDA </asp:LinkButton>
+                        </li>--%>
+
+					</ul>
+
+				</div>
+			</div>
+		</nav>
+		<!-- ===========================================================================================================================-->
+		<!-- FIN NAVEGADOR                                                                                                              -->
+		<!-- ===========================================================================================================================-->
+
+
+		<!-- ===========================================================================================================================-->
+		<!-- CONTENEDOR                                                                                                                 -->
+		<!-- ===========================================================================================================================-->
+		<div class="container">
+			<asp:ContentPlaceHolder ID="MainContent" runat="server" />
+		</div>
+		<!-- ===========================================================================================================================-->
+		<!-- FIN CONTENEDOR                                                                                                             -->
+		<!-- ===========================================================================================================================-->
+
+	    <%--============================================================================================================================--%>
+	    <%-- CONTENEDOR MODAL                                                                                                           --%>
+	    <%--============================================================================================================================--%>
+        <asp:UpdatePanel runat="server" ID="UPDATE_MENSAJE" UpdateMode="Always">
+		    <ContentTemplate>
+			    <div id="LOG_MENSAJE_SERVER" runat="server" style="display: none;"></div>
+
+			    <div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="basicModal" aria-hidden="true">
+				    <div class="modal-dialog">
+					    <div class="modal-content">
+						    <div class="modal-header">
+							    <h4 class="modal-title">
+								    <asp:Label ID="TituloModal" runat="server" Text=""></asp:Label>
+							    </h4>
+						    </div>
+						    <div class="modal-body">
+
+							    <div id="LOG_MENSAJE_DIALOG">
+							    </div>
+
+						    </div>
+						    <div class="modal-footer">
+							    <div class="row">
+								    <div class="col-sm-12 pull-right">
+									    <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+								    </div>
+							    </div>
+						    </div>
+					    </div>
+				    </div>
+			    </div>
+		    </ContentTemplate>
+	    </asp:UpdatePanel>
+	    <%--============================================================================================================================--%>
+	    <%-- FIN CONTENEDOR MODAL                                                                                                       --%>
+	    <%--============================================================================================================================--%>
+
+		<asp:UpdateProgress ID="UpdateProgress2" runat="server">
+			<ProgressTemplate>
+				<div class="overlay">
+					<div class="CenterPB" style="height: 60px; width: 60px;">
+						<img id="Img1" runat="server" src="~/images/loading.gif" alt="Loading..." style="height: 70px; width: 70px" border="0" />
+					</div>
+				</div>
+			</ProgressTemplate>
+		</asp:UpdateProgress>
+
+
+
+	</form>
+
+	    <%--============================================================================================================================--%>
+	    <%-- DISCADOR                                                                                                                   --%>
+	    <%--============================================================================================================================--%>
+
+        <%=JSLink("/js/Discador.js")%>
+
+</body>
+</html>
+
